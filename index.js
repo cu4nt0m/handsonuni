@@ -15,27 +15,21 @@ const server = http.createServer(app);
 //initialize socket io and pass it to server
 const io = socketio(server);
 
-//Set staic folder
+//Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 const botName = 'NAXY Bot';
 
 //runs when user connects
-io.on('connect', socket => {
+io.on('connection', socket => {
     socket.on('joinRoom', ({username, room}) => {
         const user1 = addUser(socket.id, username, room);
-
     socket.join(user1.room);
-//emitting a message after connection   
- // emit will emit to the single user that is connecting
-    socket.emit('message', formatMessage(botName, 'Welcome to NAXY Messenger!'));
 
-    //broadcast when a user connects
-    //(broadcast.emit will emit to all users except the one connecting)
-    //to emit to all the clients if a new connection is made, we use io.emit
-    //broadcast.to().emit helps to broadcast to a specific room
-    socket.broadcast.to(user1.room).emit('message', formatMessage(botName, `${user1.username} has joined the room`));
+    socket.emit('message', formatMessage(botName, 'Welcome to NAXY Messenger!')); //emitting a message to the user after connection to app 
 
+    socket.broadcast.to(user1.room).emit('message', formatMessage(botName, `${user1.username} has joined the room`));  //broadcast when a user connects to a specfic room
 
     //return users and info of room
     io.to(user1.room).emit('roomUsers', {
@@ -44,11 +38,10 @@ io.on('connect', socket => {
     });
     });
 
-//Listen to incoming message
+//Listen to/ handle incoming message from user in the chat room
     socket.on('chatMessage', msg => {
     const user2 = getUser(socket.id);
-//emitting incoming message back to everybody
-    io.to(user2.room).emit('message', formatMessage(user2.username, msg));
+    io.to(user2.room).emit('message', formatMessage(user2.username, msg)); //emitting incoming message back to everybody in the room
     });
 
 //runs when user disconnects

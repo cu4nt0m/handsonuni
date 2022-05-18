@@ -1,5 +1,6 @@
 //access the chat form
 const chatForm = document.getElementById('chat-form');
+
 //bring from the DOM 'chat-messages div
 const chatMessages = document.querySelector('.chat-messages');
 
@@ -11,10 +12,9 @@ const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
 });
 
-console.log(username, room);
 
 
-//we use the io variable that was passed to the server
+//we use the io variable that was passed to the server in index.js file
 const socket = io();
 
 //Join chatroom
@@ -28,30 +28,28 @@ socket.on('roomUsers', ({room, users}) => {
 
 
 
-//Message from server
+//Handle 'message' event from server
 socket.on('message', message => {
     console.log(message);
     outputMessage(message);
-
-//scroll down after new message has arrived
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages.scrollTop = chatMessages.scrollHeight; //scroll down after new message has arrived
 });
 
 
 //Message submit
 chatForm.addEventListener('submit', (e) => {
 
-//preventing the form to be submitted to a file
-    e.preventDefault();
+    e.preventDefault(); //preventing the form to be submitted to a file
 
 //getting the text input
     const msg = e.target.elements.msg.value;
+
 //emitting the message to the server
     socket.emit('chatMessage', msg);
 
 //clear Input
-e.target.elements.msg.value = '';
-e.target.elements.msg.focus();
+    e.target.elements.msg.value = '';
+    e.target.elements.msg.focus();
 });
 
 //show incoming message in the DOM
