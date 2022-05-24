@@ -14,9 +14,9 @@ const path = require('path');
 
 const app = express();
 
-const server = http.createServer(app); // Task 1.2 - create server here
+ // Task 1.2 - create server here
 
-const io = socketio(server); //Task 2.4 - initialize socket io and make it directly accessible to server here
+//Task 2.4 - initialize socket io and make it directly accessible to server here
 // ------------------------------------------------------------ Task 2 END ------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 const announcer = 'Announcer';
@@ -90,9 +90,9 @@ socket.on('sendMessage', msg => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const PORT = 8000 || process.env.PORT; // Task 1.3 - define port: 8000 for server here
+ // Task 1.3 - define port: 8000 for server here
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Task 1.4 - make server run on port here
+// Task 1.4 - make server run on port here
 // ------------------------------------------------------------ Task 1 END ------------------------------------------------------------------
 
 
