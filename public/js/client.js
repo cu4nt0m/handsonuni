@@ -47,14 +47,53 @@ function outputMessage(message) {
     const profilePic = './images/microphone.png';
     const div = document.createElement('div');
     div.classList.add('message');
-    div.innerHTML = `<p class = "meta"><img class = "img2" src= // > <b> // </b> <span>  // </span> 
+    div.innerHTML = 
+    `<p class="meta">
+        <img class="img2" src= ${profilePic} > 
+        <b> ${text.username} </b> 
+        <span> ${text.time} </span> 
     </p>
 
     <p class="text">
-        //
+        ${text.text}
     </p>`;
     document.querySelector('.chat-messages').appendChild(div);
 }
+
+
+socket.on('sendText', text => {
+    outputMessage(text);
+});
+
+
+
+
+
+
+
+// ------------------------------------------------------------ Task 3 END ------------------------------------------------------------------
+ 
+
+const newUser = {
+    username,
+    room
+};
+
+// ------------------------------------------------------------ Task 4 START ------------------------------------------------------------------
+
+socket.emit('enterSaloon', newUser);
+
+
+//Task 4 continues...
+
+
+socket.on('saloonVisitors', ({room, users}) => {
+
+showSaloonName(room);
+showVisitors(users);
+});
+
+
 
 function showSaloonName(room) {
     roomName.innerText = room;
@@ -85,7 +124,10 @@ chatForm.addEventListener('submit', (e) => {
 
     e.preventDefault(); 
 
-    const msg = e.target.elements.msg.value;
+    const message = e.target.elements.msg.value;
+
+ // ------------------------------------------------------------ Task 5.1 START ------------------------------------------------------------------   
+    socket.emit('sendMessage', message);
 
      // Task 6.1 - Emit const msg with event 'sendMessage' here. Const msg contains the message text sent by a user
 
