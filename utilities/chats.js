@@ -12,6 +12,7 @@ function renderMessage(username, text) {
 
 // ------------------------------------------------------------ Task 1 START ------------------------------------------------------------------
 
+module.exports = renderMessage; 
 
 
 //Task 1 continues...

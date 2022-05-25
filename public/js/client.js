@@ -37,17 +37,23 @@ function outputMessage(text) {
     div.classList.add('message');
     div.innerHTML = 
     `<p class="meta">
-        <img class="img2" src= dash_1 > 
-        <b> dash_2 </b> 
-        <span> dash_3 </span> 
+        <img class="img2" src= ${profilePic} > 
+        <b> ${text.username} </b> 
+        <span> ${text.time} </span> 
     </p>
 
     <p class="text">
-        dash_4
+        ${text.text}
     </p>`;
     document.querySelector('.chat-messages').appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight; 
 }
+
+
+socket.on('sendText', text => {
+    outputMessage(text);
+}); 
+
 
 
 
@@ -63,17 +69,19 @@ const newUser = {
     room
 };
 
+
 // ------------------------------------------------------------ Task 4 START ------------------------------------------------------------------
 
+socket.emit('enterSaloon', newUser);
 
 
 //Task 4 continues...
 
 
-socket.on('saloonVsitors', ({room, users}) => {
+socket.on('saloonVisitors', ({room, users}) => {
 
 showSaloonName(room);
-showUsers(users);
+showVisitors(users);
 });
 
 
@@ -100,6 +108,7 @@ chatForm.addEventListener('submit', (e) => {
     const message = e.target.elements.msg.value;
 
  // ------------------------------------------------------------ Task 5.1 START ------------------------------------------------------------------   
+ socket.emit('sendMessage', message);
 
 
 
